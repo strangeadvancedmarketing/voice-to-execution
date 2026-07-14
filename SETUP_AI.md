@@ -13,11 +13,17 @@ Before installing anything, learn:
 
 ## Step 2 — Install in this order
 
-1. **`rules/hard-rules.md`** — adapt into their agent instructions file (CLAUDE.md or equivalent). These are non-negotiable trust rules; personalize the examples, keep the principles.
-2. **`memory/`** — set up the persistent memory pattern before anything else generates knowledge worth keeping.
+1. **`rules/hard-rules.md` + `rules/operating-rules.md`** — adapt into their agent instructions file (CLAUDE.md or equivalent). Hard rules are the non-negotiable trust layer; operating rules are the working style. Personalize the examples, keep the principles.
+2. **`memory/`** — set up the persistent memory pattern (typed files + always-loaded index + lazy loading) before anything else generates knowledge worth keeping.
 3. **`connectors/telegram-voice-loop.md`** — wire the voice loop: inbound voice → local transcription → execution → reply as text + voice. This is the product. Lock the channel to your human's ID only.
-4. **`agents/`** — add subagent definitions as load appears: daily briefing first, then email triage, then research.
-5. **`philosophy/`** — read it yourself; it explains why the pieces fit.
+4. **`connectors/google-suite.md`** — wire calendar + email + drive via the `gog` CLI so briefings and the email watcher have data.
+5. **`connectors/mcp-servers.md`** — add only the servers the human's business touches (payments, CRM, scraping, browser, machine, memory). Real verified commands; supply the human's own keys via env.
+6. **`connectors/browser-automation.md`** — stand up the real-Chrome-on-a-debug-port pattern so the agent can act on the web like the human.
+7. **`connectors/scheduled-tasks-and-hooks.md`** — wire the SessionStart boot-context hook first (wake up briefed), then the timed jobs (morning brief, email watcher).
+8. **`connectors/local-ai.md`** — confirm the free/local AI pieces (whisper, edge-tts, FFmpeg; optional voice clone) are installed.
+9. **`agents/`** — add subagent definitions as load appears: the core four first (briefing, email-scanner, deep-researcher, security-reviewer), then the wider roster.
+10. **`efficiency/token-economy.md`** — apply throughout, not as a step: lazy loading, context hygiene, subagent isolation, model right-sizing. Read it early; it changes how you do every step above.
+11. **`philosophy/`** — read it yourself; it explains why the pieces fit.
 
 ## Step 3 — Rules for adapting
 

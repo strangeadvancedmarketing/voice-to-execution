@@ -16,11 +16,14 @@ Your agent reads `SETUP_AI.md`, interviews you, and adapts each piece to your li
 
 | Directory | What it gives your agent |
 |-----------|--------------------------|
-| `rules/` | The hard rules that make an agent trustworthy — verification before claims, money protection, execute-don't-instruct |
-| `connectors/` | Voice loop (Telegram + TTS + transcription), Google suite CLI, browser automation lanes |
-| `agents/` | Subagent definitions that carry the operational load — briefings, email triage, research |
-| `memory/` | The persistent memory pattern: typed memory files, an always-loaded index, boot context compilation |
+| `rules/` | `hard-rules.md` (the trust layer — verification before claims, money protection, execute-don't-instruct) and `operating-rules.md` (communication, producing work, workflow, rhythm) |
+| `connectors/` | Every integration the stack runs: the voice loop (Telegram + local transcription + TTS), Google suite CLI, the full **MCP-server layer** (payments, CRM, scraping, browser, machine, memory), **browser automation** (a real logged-in Chrome the agent drives), **scheduled tasks & hooks**, and **local/free AI** (whisper, edge-tts, voice clone, FFmpeg) |
+| `agents/` | The subagent fleet — the load-bearing core four plus the full roster (planning, code quality, build/test, ops, research, growth) |
+| `memory/` | The persistent memory pattern: typed files, an always-loaded index, boot-context compilation, and the lazy-loading that lets it scale to hundreds of files |
+| `efficiency/` | `token-economy.md` — how a heavy agent runs all day on a normal plan: lazy loading, context hygiene, subagent isolation, knowledge-graph queries, model right-sizing |
 | `philosophy/` | Why this works: voice-to-execution, sequencing over scattering, rhythm keeping |
+
+Every integration ships with the **real, verified commands** — not placeholders. What's deliberately left out: API keys, tokens, and anything security-sensitive. Your agent supplies your own credentials during setup; the patterns and commands are complete.
 
 ## The core idea
 
