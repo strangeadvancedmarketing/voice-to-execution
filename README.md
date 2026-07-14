@@ -8,7 +8,7 @@ This repo is the cleaned, shareable version of the stack behind [Strange Advance
 
 You have an AI agent — Claude Code first and foremost; OpenClaw and similar agents work too — and you want it to operate like a chief of staff instead of a chatbot. You don't copy this repo. **You point your agent at it:**
 
-> "Read https://github.com/AJSupplyCoLLC/voice-to-execution and set up what fits me."
+> "Read https://github.com/strangeadvancedmarketing/voice-to-execution and set up what fits me."
 
 Your agent reads `SETUP_AI.md`, interviews you, and adapts each piece to your life and business. Nothing here is install-and-forget; everything is a pattern your agent tailors.
 
