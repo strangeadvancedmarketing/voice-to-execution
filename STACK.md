@@ -19,10 +19,11 @@ This is the full map. Everything the operator runs, connects to, or was built to
 ## 3. Agents — the 37-agent fleet
 Planning, code review (11 language + domain reviewers), build/test resolvers, maintenance, ops & monitoring, research, growth/business, chief-of-staff. Full named roster + provenance: `agents/README.md`
 
-## 4. Memory — the compounding moat
-- **Typed memory files** (`feedback_/project_/reference_/user_`) + always-loaded `MEMORY.md` index. `memory/README.md`
+## 4. Memory & knowledge — the compounding moat
+- **Agent memory** — typed files (`feedback_/project_/reference_/user_`) + always-loaded `MEMORY.md` index; how the agent runs. `memory/README.md`
 - **Lazy loading** — index always in context, files on demand; scales to hundreds. `memory/README.md`, `efficiency/token-economy.md`
 - **Neural/associative capture** — a capture hook saves every session; a query layer recalls across them (optional layer on top of files). `connectors/mcp-servers.md`
+- **Knowledge vault (the second brain)** — an **Obsidian** vault of the whole operation (trackers, research, content, sessions, design system) with `[[wikilinks]]`, a queryable knowledge graph, and hourly snapshots. Trackers are canonical state; the graph is the cheap cross-topic lookup. `capabilities/knowledge-vault.md`
 
 ## 5. Automation — hooks & scheduled jobs (the actual wired set)
 - **SessionStart** → boot-context compiler; wake up briefed. `connectors/scheduled-tasks-and-hooks.md`

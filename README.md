@@ -25,7 +25,7 @@ Your agent reads `SETUP_AI.md`, interviews you, and adapts each piece to your li
 | `memory/` | The persistent memory pattern: typed files, an always-loaded index, boot-context compilation, and the lazy-loading that lets it scale to hundreds of files |
 | `efficiency/` | `token-economy.md` — how a heavy agent runs all day on a normal plan: lazy loading, context hygiene, subagent isolation, knowledge-graph queries, model right-sizing |
 | `skills/` | The ~33-skill library (content/media, marketing/SEO, design, research, ops) plus the enabled plugin bundles — packaged capabilities that load on demand |
-| `capabilities/` | Apps the agent built: the **operator dashboard** (live session view with a real embedded terminal) and the **daily ops board** (a page updated in place all day) |
+| `capabilities/` | What the agent built: the **operator dashboard** (live session view with a real embedded terminal), the **daily ops board** (a page updated in place all day), and the **knowledge vault** (an Obsidian second-brain with a queryable graph + hourly snapshots) |
 | `rules/` | `hard-rules.md`, `operating-rules.md`, and `security-and-hardening.md` (secrets, least-privilege, prompt-injection defense) |
 | `philosophy/` | Why this works: voice-to-execution, sequencing over scattering, rhythm keeping |
 
