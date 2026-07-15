@@ -24,11 +24,19 @@ The most valuable hook. On every session start, a script compiles the current st
 
 The compiler reads the memory index + open loops + calendar and writes one briefing. See `memory/README.md` for what it pulls from.
 
-## Other hooks worth wiring
+## The full hook set (this is the actual production wiring)
 
-- **PreCompact** — before the context window compacts, persist a session snapshot so nothing important is lost in summarization.
-- **PostToolUse** — capture every session to persistent memory automatically (feeds the neural-memory capture layer), or run a formatter/linter after file edits.
-- **Stop** — write a one-line "what just happened" to the day's log.
+Every one of these runs in the real stack. Names are the events; the job each does is what matters.
+
+- **SessionStart** → a boot-context compiler script. Compiles state into the injected briefing (above).
+- **PreToolUse** → a guard that blocks tools you never want fired blindly (e.g. a fetch tool that pops visible browser windows). A hook is the enforcement layer memory can't be — the harness runs it, not the agent's goodwill.
+- **PreCompact** → two hooks: the neural-memory capture (`nmem-hook-pre-compact`) and a snapshot-saver that persists the session before the window compacts, so nothing is lost to summarization.
+- **PostCompact** → a **reorient** hook that re-grounds the agent right after a compaction (what was I doing, what's still open) so it doesn't drift on the summarized context.
+- **PostToolUse** → a contextual-display hook (surface state after actions) plus any companion bridge (e.g. a desktop status widget).
+- **Stop** → the neural-memory capture (`nmem-hook-stop`), the snapshot-saver, and a session-logger that writes what happened to the day's log.
+- **UserPromptSubmit** → a **drift-monitor** that watches for the agent sliding off its standing rules (e.g. dropping a required reply format) and flags it early.
+
+The pattern: anything that must happen *every time* — regardless of whether the agent "remembers" — is a hook, because the harness enforces hooks and can't be talked out of them.
 
 ## Scheduled tasks — work on the clock
 
