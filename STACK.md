@@ -4,7 +4,7 @@ This is the full map. Everything the operator runs, connects to, or was built to
 
 ## 1. The voice loop (the product)
 - **Telegram voice loop** — voice in → local transcription → execution → text + voice reply. `connectors/telegram-voice-loop.md`
-- **Inbound transcription** — `faster-whisper` (small, local, custom vocab). `connectors/local-ai.md`
+- **Inbound transcription** — `faster-whisper` (small, local; term-biasing via `initial_prompt`/`hotwords`). `connectors/local-ai.md`
 - **Outbound voice** — `edge-tts`, one locked voice. `connectors/local-ai.md`
 - **Reactions & receipts** — 👀/✅ as silent status; paste-ready messages. `rules/operating-rules.md`
 
@@ -26,7 +26,8 @@ Planning, code review (11 language + domain reviewers), build/test resolvers, ma
 - **Knowledge vault (the second brain)** — an **Obsidian** vault of the whole operation (trackers, research, content, sessions, design system) with `[[wikilinks]]`, a queryable knowledge graph, and hourly snapshots. Trackers are canonical state; the graph is the cheap cross-topic lookup. `capabilities/knowledge-vault.md`
 
 ## 5. Automation — hooks & scheduled jobs (the actual wired set)
-- **SessionStart** → boot-context compiler; wake up briefed. `connectors/scheduled-tasks-and-hooks.md`
+Working, sanitized scripts ship in **[`hooks/`](hooks/)** (5 files + README + a copy-paste `settings.json` snippet in the doc).
+- **SessionStart** → `hooks/boot-context-compiler.ps1`; wake up briefed. `connectors/scheduled-tasks-and-hooks.md`
 - **PreToolUse** → guard/block tools you never want fired blindly.
 - **PreCompact** → neural-memory capture + session snapshot before the window compacts.
 - **PostCompact** → reorient hook; re-ground after summarization so the agent doesn't drift.

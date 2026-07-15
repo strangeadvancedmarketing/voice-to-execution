@@ -13,9 +13,14 @@ The same rule applies to everything: eager-read only the small, always-relevant 
 When fetching a web page or a large tool output, never pour the whole thing into context.
 
 ```bash
+# macOS/Linux (or Git-for-Windows Bash):
 curl -sL URL -o /tmp/page.html          # save to disk
-# extract ONLY the slice you need
-grep -i -o ".\{0,100\}keyword.\{0,300\}" /tmp/page.html | head
+grep -i -o ".\{0,100\}keyword.\{0,300\}" /tmp/page.html | head   # extract ONLY the slice you need
+```
+```powershell
+# Windows (PowerShell) equivalent — %TEMP% instead of /tmp, Select-String instead of grep:
+curl.exe -sL URL -o "$env:TEMP\page.html"
+Select-String -Path "$env:TEMP\page.html" -Pattern "keyword" -Context 0,2 | Select-Object -First 5
 ```
 
 Read a specific offset/range of a big file, not the whole file. Grep/head/tail to the exact lines. Dumping a full page re-caches hundreds of KB every subsequent turn — the cost is paid over and over, not once.

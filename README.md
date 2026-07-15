@@ -29,7 +29,7 @@ Your agent reads `SETUP_AI.md`, interviews you, and adapts each piece to your li
 | `rules/` | `hard-rules.md`, `operating-rules.md`, `security-and-hardening.md`, and **`lessons-learned.md`** — the hard-won wisdom (verify-never-guess, deliver-in-channel, test-one-before-batch, and 30+ more), each with the mistake that taught it, so your agent skips the failures |
 | `philosophy/` | Why this works: voice-to-execution, sequencing over scattering, rhythm keeping |
 
-Every integration ships with the **real, verified commands** — not placeholders. What's deliberately left out: API keys, tokens, and anything security-sensitive. Your agent supplies your own credentials during setup; the patterns and commands are complete.
+Every integration ships with **real commands and working, runnable scripts** (the hooks in [`hooks/`](hooks/) are the production wiring, sanitized) — not empty placeholders. Where a tool is third-party, early-stage, or custom to this stack, the doc says so plainly and gives the honest pattern instead of pretending it's a one-click install. What's deliberately left out: API keys, tokens, and anything security-sensitive — your agent supplies your own credentials during setup.
 
 ## The core idea
 

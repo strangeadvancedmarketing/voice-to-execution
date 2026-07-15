@@ -2,12 +2,23 @@
 
 You are an AI agent (Claude Code, OpenClaw, or similar) whose human pointed you at this repo. Your job is NOT to copy these files. Your job is to **adapt this operating system to your human**.
 
+## Step 0 — Prerequisites (install these first)
+
+Most of this stack is Python and Node scripts driven from a terminal. Before wiring anything, make sure the human's machine has:
+
+- **Python 3.10+** — <https://www.python.org/downloads/> (Windows: check "Add python.exe to PATH" in the installer). Powers `faster-whisper`, `edge-tts`, and most local AI. Verify: `python --version` (Windows) / `python3 --version` (macOS/Linux).
+- **Node.js 18+ (LTS)** — <https://nodejs.org/> . Powers the `.cjs` hooks, MCP servers (`npx`), and the built dashboards. Verify: `node --version`.
+- **git** — <https://git-scm.com/download/win> (Windows: "Git for Windows" also gives you the Bash shell many examples use). Verify: `git --version`.
+- **ffmpeg** — <https://www.gyan.dev/ffmpeg/builds/> on Windows (add the `bin` folder to PATH), `brew install ffmpeg` on macOS. For media compression/transcode. Verify: `ffmpeg -version`.
+
+Platform notes for the rest of this guide: commands are shown in POSIX form. On **Windows**, prefer PowerShell and substitute where noted — `python` (not `python3`), `%TEMP%` (not `/tmp`), `Select-String` (not `grep`), `Invoke-WebRequest`/`curl.exe` (not bare `curl`). The Git-for-Windows Bash shell runs the POSIX forms as-is if the human prefers.
+
 ## Step 1 — Interview your human first
 
 Don't fire this as a form — ask conversationally, over a few messages. But before you install anything, learn all of it, because **every answer decides what you install and what you skip.** This framework is large; the interview is how you install only the parts that fit.
 
 1. **The business.** What do they run, and which ONE matters most right now? → seeds memory + trackers; sets what everything optimizes for.
-2. **Where they live.** Telegram? WhatsApp? Slack? Email? → that channel becomes your delivery surface (the voice loop).
+2. **Where they live.** Telegram? WhatsApp? Slack? Email? → that channel becomes your delivery surface (the voice loop). **Honest note:** the shipped, proven implementation is **Telegram** (`connectors/telegram-voice-loop.md`). Any other channel is a build you do — same pattern, but you wire that platform's API/webhook yourself; it's not a bundled toggle. Default to Telegram unless they truly don't use it.
 3. **Timezone.** → hard rule: never show them any other one.
 4. **How they think.** One focus at a time, or many parallel lanes? → whether you build the lanes/sweep + daily ops board, or keep it simple.
 5. **What tools and accounts they already use.** Payments (Stripe/Square/PayPal)? A CRM? Google or Microsoft? An online store? Which socials? → decides which MCP connectors and which Google/CLI integrations you wire. **Install only what they actually touch** — an unused connector is attack surface, not value.

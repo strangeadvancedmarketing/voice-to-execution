@@ -4,10 +4,21 @@ The stack runs on free, local, or free-tier AI wherever possible — not to be c
 
 ## The ears — transcription (free, local)
 
-`faster-whisper` (small model) transcribes inbound voice notes locally. Free, private, fast, and handles proper nouns far better than tiny models — feed it a custom vocabulary of the human's business terms, client names, and product names so it stops mangling them.
+`faster-whisper` (small model) transcribes inbound voice notes locally. Free, private, fast, and handles proper nouns far better than tiny models. To stop it mangling the human's business terms, client names, and product names, bias the decoder toward them — Whisper has **no custom-vocabulary file**; you steer it with `initial_prompt` (a short string listing the terms, prepended as context) and/or `hotwords` in `faster-whisper`. Both nudge recognition toward those words; neither is a dictionary you load.
 
 ```bash
 pip install faster-whisper
+```
+```python
+from faster_whisper import WhisperModel
+model = WhisperModel("small")
+# Bias toward your terms — this is the real "custom vocab" mechanism:
+segments, _ = model.transcribe(
+    "note.ogg",
+    initial_prompt="Terms: Acme Roofing, TurfTracker, Jereme, Webflow.",
+    # hotwords="Acme Roofing TurfTracker",   # alternative/additional biasing
+)
+print(" ".join(s.text for s in segments))
 # transcribe locally; never ship a human's audio to a paid API for this
 ```
 

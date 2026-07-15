@@ -8,10 +8,23 @@ A brand-new automated browser trips bot detection constantly — captchas, "unus
 
 ## Setup
 
-Launch Chrome with the remote-debugging port open, using a dedicated profile so it doesn't fight the human's everyday window:
+Launch Chrome with the remote-debugging port open, using a dedicated profile so it doesn't fight the human's everyday window. Use the full path to `chrome.exe` (bare `chrome` isn't on the PATH on Windows):
+
+```powershell
+# Windows (PowerShell) — real, working command:
+& "C:\Program Files\Google\Chrome\Application\chrome.exe" `
+  --remote-debugging-port=9222 `
+  --user-data-dir="$env:USERPROFILE\chrome-debug-profile"
+# (If Chrome is installed per-user, it's at
+#  "$env:LOCALAPPDATA\Google\Chrome\Application\chrome.exe" instead.)
+```
 
 ```bash
-chrome --remote-debugging-port=9222 --user-data-dir="C:/path/to/debug-profile"
+# macOS:
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+  --remote-debugging-port=9222 --user-data-dir="$HOME/chrome-debug-profile"
+# Linux:
+google-chrome --remote-debugging-port=9222 --user-data-dir="$HOME/chrome-debug-profile"
 ```
 
 The human logs into the accounts they want the agent to operate (once). From then on the agent connects over the Chrome DevTools Protocol (CDP) on port 9222 — either through the Playwright MCP pointed at that endpoint, or raw CDP calls.
@@ -22,7 +35,15 @@ claude mcp add playwright -- npx @playwright/mcp@latest --cdp-endpoint http://lo
 
 ### A token-cheaper option: agent-browser
 
-Playwright/CDP returns verbose DOM that eats context fast. A purpose-built agent browser (e.g. `agent-browser`) can cut the tokens per browser action dramatically (~80% in testing) by returning a compact, agent-shaped view of the page instead of raw DOM. Prefer it for high-volume browsing; keep raw CDP for the fine-grained cases (shadow DOM, exact input events). See `efficiency/token-economy.md` — the browser is one of the biggest context sinks in the whole stack.
+Playwright/CDP returns verbose DOM that eats context fast. A purpose-built agent browser returns a compact, agent-shaped view of the page instead of raw DOM, which can cut the tokens per browser action substantially. Prefer that class of tool for high-volume browsing; keep raw CDP for the fine-grained cases (shadow DOM, exact input events). See `efficiency/token-economy.md` — the browser is one of the biggest context sinks in the whole stack.
+
+One such tool is **`agent-browser`** from Vercel Labs (npm: `agent-browser`, source: <https://github.com/vercel-labs/agent-browser>):
+
+```bash
+npx agent-browser            # or: npm install -g agent-browser
+```
+
+**Honest status:** it's early-stage (its own npm description still reads "Coming soon") and it is *not* battle-tested in this stack — we've noted the token-saving idea but not adopted it in production. Treat the "~80% fewer tokens" figure as the vendor's claim, not our verified result: benchmark it on your own pages before relying on it, and keep the raw-CDP path as the fallback that's actually proven here.
 
 ## The patterns that matter
 
