@@ -26,7 +26,7 @@ Your agent reads `SETUP_AI.md`, interviews you, and adapts each piece to your li
 | `efficiency/` | `token-economy.md` — how a heavy agent runs all day on a normal plan: lazy loading, context hygiene, subagent isolation, knowledge-graph queries, model right-sizing |
 | `skills/` | The ~33-skill library (content/media, marketing/SEO, design, research, ops) plus the enabled plugin bundles — packaged capabilities that load on demand |
 | `capabilities/` | What the agent built: the **operator dashboard** (live session view with a real embedded terminal), the **daily ops board** (a page updated in place all day), and the **knowledge vault** (an Obsidian second-brain with a queryable graph + hourly snapshots) |
-| `rules/` | `hard-rules.md`, `operating-rules.md`, and `security-and-hardening.md` (secrets, least-privilege, prompt-injection defense) |
+| `rules/` | `hard-rules.md`, `operating-rules.md`, `security-and-hardening.md`, and **`lessons-learned.md`** — the hard-won wisdom (verify-never-guess, deliver-in-channel, test-one-before-batch, and 30+ more), each with the mistake that taught it, so your agent skips the failures |
 | `philosophy/` | Why this works: voice-to-execution, sequencing over scattering, rhythm keeping |
 
 Every integration ships with the **real, verified commands** — not placeholders. What's deliberately left out: API keys, tokens, and anything security-sensitive. Your agent supplies your own credentials during setup; the patterns and commands are complete.

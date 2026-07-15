@@ -51,6 +51,7 @@ Lazy loading, context hygiene (extract don't dump), subagent isolation, boot-con
 - **Hard rules** (trust layer): verify before claiming, protect the money, execute-don't-instruct, test-one-before-batch, one-playbook, timezone discipline. `rules/hard-rules.md`
 - **Operating rules** (working style): lead with outcome, plain-text messenger, paste-ready, no raw data, root-cause fixes, sequencing. `rules/operating-rules.md`
 - **Security & hardening**: secrets off cloud-sync, token ACLs, audit-before-access, least-privilege, prompt-injection defense, risky tools off when idle. `rules/security-and-hardening.md`
+- **Lessons learned**: the hard-won operating wisdom — every rule that was learned by making the mistake first, so a new agent gets the perfected version without paying for it again. `rules/lessons-learned.md`
 
 ## 10. Philosophy — why it works
 Voice-to-execution as architecture; sequencing over scattering; the voice-loop habit + cumulative context as the two moats. `philosophy/voice-to-execution.md`
