@@ -20,6 +20,10 @@ The human logs into the accounts they want the agent to operate (once). From the
 claude mcp add playwright -- npx @playwright/mcp@latest --cdp-endpoint http://localhost:9222
 ```
 
+### A token-cheaper option: agent-browser
+
+Playwright/CDP returns verbose DOM that eats context fast. A purpose-built agent browser (e.g. `agent-browser`) can cut the tokens per browser action dramatically (~80% in testing) by returning a compact, agent-shaped view of the page instead of raw DOM. Prefer it for high-volume browsing; keep raw CDP for the fine-grained cases (shadow DOM, exact input events). See `efficiency/token-economy.md` — the browser is one of the biggest context sinks in the whole stack.
+
 ## The patterns that matter
 
 **Read the rendered page, not the raw HTML.** For "is this account banned / did this post go live / what does this dashboard say," read what actually rendered. Raw source lies; the DOM after JS is the truth.
@@ -28,7 +32,9 @@ claude mcp add playwright -- npx @playwright/mcp@latest --cdp-endpoint http://lo
 
 **Human pacing.** When acting inside a real account (messages, follows, form submits), space actions out (tens of seconds, not milliseconds) and cap volume. Bot-speed bursts are exactly what platform spam systems flag.
 
-**Captcha is a team move, not a wall.** When a captcha appears, the agent doesn't try to solve it — it pauses and hands the human the exact tab; the human solves it in two taps and the agent continues. Script-owned browser windows can't do this handoff; a real logged-in Chrome can.
+**Captcha (and final-submit) is a team move, not a wall.** When a captcha appears, the agent doesn't try to solve it — it pauses and hands the human the exact tab; the human solves it in two taps and the agent continues. Some sites also ignore programmatic clicks on the final submit as an anti-bot gate — the agent fills every field, and the human taps the one final Continue. Script-owned browser windows can't do this handoff; a real logged-in Chrome can.
+
+**Pierce shadow DOM when inputs are hidden in it.** Some sites (e.g. certain signup forms) put their real input fields inside shadow roots, invisible to ordinary selectors. Raw CDP can pierce the shadow DOM to fill them. When a form "has no fillable fields," check for shadow roots before giving up.
 
 ## Safety
 

@@ -12,15 +12,20 @@ You have an AI agent — Claude Code first and foremost; OpenClaw and similar ag
 
 Your agent reads `SETUP_AI.md`, interviews you, and adapts each piece to your life and business. Nothing here is install-and-forget; everything is a pattern your agent tailors.
 
+## The complete map
+
+**[`STACK.md`](STACK.md) is the full inventory** — every connector, agent, hook, capability, and rule in the stack, each pointing to its own doc. If you want to see everything at once, start there. The summary:
+
 ## What's inside
 
 | Directory | What it gives your agent |
 |-----------|--------------------------|
-| `rules/` | `hard-rules.md` (the trust layer — verification before claims, money protection, execute-don't-instruct) and `operating-rules.md` (communication, producing work, workflow, rhythm) |
-| `connectors/` | Every integration the stack runs: the voice loop (Telegram + local transcription + TTS), Google suite CLI, the full **MCP-server layer** (payments, CRM, scraping, browser, machine, memory), **browser automation** (a real logged-in Chrome the agent drives), **scheduled tasks & hooks**, and **local/free AI** (whisper, edge-tts, voice clone, FFmpeg) |
-| `agents/` | The subagent fleet — the load-bearing core four plus the full roster (planning, code quality, build/test, ops, research, growth) |
+| `connectors/` | Every integration the stack runs: the voice loop (Telegram + local transcription + TTS), Google suite CLI, the full **MCP-server layer** (payments, CRM, scraping, browser, machine, memory), **browser automation** (real logged-in Chrome + the token-cheap `agent-browser`), **web & social research** (`agent-reach` + OpenCLI), **scheduled tasks & hooks**, and **local/free AI** (whisper, edge-tts, voice clone, FFmpeg, free image/video gen) |
+| `agents/` | The full **37-agent fleet**, named and grouped — planning, code review, build/test, maintenance, ops, research, growth, chief-of-staff |
 | `memory/` | The persistent memory pattern: typed files, an always-loaded index, boot-context compilation, and the lazy-loading that lets it scale to hundreds of files |
 | `efficiency/` | `token-economy.md` — how a heavy agent runs all day on a normal plan: lazy loading, context hygiene, subagent isolation, knowledge-graph queries, model right-sizing |
+| `capabilities/` | Apps the agent built: the **operator dashboard** (live session view with a real embedded terminal) and the **daily ops board** (a page updated in place all day) |
+| `rules/` | `hard-rules.md`, `operating-rules.md`, and `security-and-hardening.md` (secrets, least-privilege, prompt-injection defense) |
 | `philosophy/` | Why this works: voice-to-execution, sequencing over scattering, rhythm keeping |
 
 Every integration ships with the **real, verified commands** — not placeholders. What's deliberately left out: API keys, tokens, and anything security-sensitive. Your agent supplies your own credentials during setup; the patterns and commands are complete.

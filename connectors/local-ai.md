@@ -25,12 +25,16 @@ edge-tts --voice en-GB-RyanNeural --rate=+20% --text "..." --write-media reply.m
 
 For content in the human's own voice, a local voice-clone model (e.g. Chatterbox) runs on their machine — no per-generation cost, no audio leaving the box. Use it for content only, never to impersonate the human in a way that could mislead.
 
-## Free generation lanes
+## Free generation lanes (tested, not theorized)
 
 For images and short video without a paid bill:
-- **Hugging Face** — hosted MCP + free ZeroGPU Spaces for image (and some video) generation.
-- **Cloudflare Workers AI** — a free daily image allotment.
-- Verify the current free-tier terms before using output commercially — free-for-personal is not always free-for-commercial, and that line moves. (This is rule #2: never assume a billing model — check it.)
+- **Hugging Face ZeroGPU Spaces** — free video generation, driven programmatically via `gradio_client` (live-tested: a short clip in ~28 seconds, $0). The free MCP also gives image gen.
+- **Cloudflare Workers AI** — FLUX-schnell image generation on a free daily allotment (~230 images/day), commercial-clear.
+- **Myth-busts from real testing:** some "free" tiers aren't — a major studio's free tier was a one-time credit, and one big vendor has no free generation tier at all despite the marketing. Verify the current free-tier terms before using output commercially; free-for-personal is not always free-for-commercial, and that line moves. (Rule #2: never assume a billing model — check it.)
+
+## Media/caption tooling
+
+Small vendored utilities keep the media pipeline free and local: a frame-extraction + captions-first VTT parser for pulling stills and transcripts from video, a media downloader (`gallery-dl`) for archiving source content, and a badge/watermark applier that overlays a mark rather than re-generating the frame. All local, all free.
 
 ## Media processing — FFmpeg
 

@@ -16,23 +16,29 @@ Any research needing 5+ web searches runs isolated: searches, reads, compiles to
 ### 4. security-reviewer
 Reviews any third-party code BEFORE it gets credentials or system access. Real example from this stack: two audits of a popular open-source tool found the tool itself clean but its companion Chrome extension demanded maximum browser privileges with an unauthenticated local daemon — verdict changed from "install" to "hold." The pattern: audit first, decide with evidence.
 
-## The full roster (add as the load appears)
+## The full roster — all 37
 
-The real fleet groups into six jobs. You won't need all of them day one; add each when the work it handles starts costing your main context.
+The production fleet is 37 agents. It began as a snapshot of an open-source agent collection and was then hardened (prompt-injection baseline on every one, read-only tools for reviewers, a proof-gate on code reviewers so they can't manufacture findings). You won't need all 37 day one — add each when its work starts costing your main context — but here is the complete set so the count is honest and nothing is hidden behind "etc."
 
-**Planning & architecture** — `planner` (breaks a complex feature/goal into ordered steps before any code), `architect` (system-design and trade-off decisions).
+**Planning & architecture (2)** — `planner` (break a complex goal into ordered steps before any code), `architect` (system design, scalability, trade-off calls).
 
-**Code quality** — language-specific reviewers (`python-reviewer`, `typescript-reviewer`, `go-reviewer`, `rust-reviewer`, and peers), a general `code-reviewer`, `security-reviewer`, and `refactor-cleaner` (dead-code removal). Each is read-only and gated against manufactured findings.
+**Code review (11)** — `code-reviewer` (general), `security-reviewer`, `database-reviewer`, and language specialists: `python-reviewer`, `typescript-reviewer`, `go-reviewer`, `rust-reviewer`, `java-reviewer`, `cpp-reviewer`, `kotlin-reviewer`, `flutter-reviewer`. All read-only, all gated against manufactured findings.
 
-**Build & test** — build-error resolvers per stack (`build-error-resolver`, `cpp-build-resolver`, `go-build-resolver`, and peers), `tdd-guide` (tests first), `e2e-runner` (critical user flows). Minimal-diff, get-it-green agents.
+**Build & test (9)** — `build-error-resolver` plus per-stack resolvers `cpp-build-resolver`, `go-build-resolver`, `java-build-resolver`, `kotlin-build-resolver`, `rust-build-resolver`, `pytorch-build-resolver`; `tdd-guide` (tests first), `e2e-runner` (critical flows). Minimal-diff, get-it-green.
 
-**Ops & monitoring** — `daily-briefing`, `email-scanner`, `bot-doctor` (health-check a deployed bot over SSH: process, logs, memory, freshness), plus scheduled-sweep agents that report status to the messenger.
+**Code maintenance (2)** — `refactor-cleaner` (dead-code removal), `doc-updater` (docs + codemaps).
 
-**Research & knowledge** — `deep-researcher`, docs-lookup agents that pull current library docs instead of guessing, and a knowledge-graph query agent (see `efficiency/token-economy.md`).
+**Ops & monitoring (4)** — `daily-briefing`, `email-scanner`, `bot-doctor` (SSH health-check a deployed bot: process, logs, memory, freshness), `harness-optimizer` (tune the agent harness itself for reliability/cost).
 
-**Growth / business** (adapt to the human's business) — outreach drafting, prospect research, lead follow-up. These touch external contacts, so they carry the full prompt-defense block and never send without human approval.
+**Research & knowledge (3)** — `deep-researcher` (isolated multi-search research), `docs-lookup` (pull current library docs instead of guessing), `loop-operator` (drive and supervise autonomous loops).
 
-Every one of these is a small markdown definition your agent generates and tailors. Start with the core four; let the roster grow to fit the human, not the other way around.
+**Growth / business (5)** — `copywriter`, `prospector`, `researcher`, `outreach`, `followup`. These touch external contacts, so they carry the full prompt-defense block and never send without human approval. Adapt them to the human's business.
+
+**Chief of staff (1)** — `chief-of-staff` (multi-channel triage: classify, draft replies, enforce follow-through).
+
+That's the fleet. Every one is a small markdown definition your agent generates and tailors to the human. Start with the core four above; grow into the rest as the work appears.
+
+> Provenance & licensing note: the roster derives from an open-source collection. When you publish your own agents, keep the upstream license/attribution for the ones you adopted, and treat any business-specific agent (outreach, prospecting) as yours to sanitize before sharing — names, targets, and pipeline details are examples to replace, not ship.
 
 ## Hardening patterns
 

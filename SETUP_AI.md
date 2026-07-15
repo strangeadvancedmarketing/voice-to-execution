@@ -18,12 +18,17 @@ Before installing anything, learn:
 3. **`connectors/telegram-voice-loop.md`** — wire the voice loop: inbound voice → local transcription → execution → reply as text + voice. This is the product. Lock the channel to your human's ID only.
 4. **`connectors/google-suite.md`** — wire calendar + email + drive via the `gog` CLI so briefings and the email watcher have data.
 5. **`connectors/mcp-servers.md`** — add only the servers the human's business touches (payments, CRM, scraping, browser, machine, memory). Real verified commands; supply the human's own keys via env.
-6. **`connectors/browser-automation.md`** — stand up the real-Chrome-on-a-debug-port pattern so the agent can act on the web like the human.
-7. **`connectors/scheduled-tasks-and-hooks.md`** — wire the SessionStart boot-context hook first (wake up briefed), then the timed jobs (morning brief, email watcher).
-8. **`connectors/local-ai.md`** — confirm the free/local AI pieces (whisper, edge-tts, FFmpeg; optional voice clone) are installed.
-9. **`agents/`** — add subagent definitions as load appears: the core four first (briefing, email-scanner, deep-researcher, security-reviewer), then the wider roster.
-10. **`efficiency/token-economy.md`** — apply throughout, not as a step: lazy loading, context hygiene, subagent isolation, model right-sizing. Read it early; it changes how you do every step above.
-11. **`philosophy/`** — read it yourself; it explains why the pieces fit.
+6. **`connectors/browser-automation.md`** — stand up the real-Chrome-on-a-debug-port pattern (and the token-cheap `agent-browser`) so the agent can act on the web like the human.
+7. **`connectors/web-and-social-research.md`** — add `agent-reach` for free web/YouTube/RSS; add the OpenCLI social bridge ONLY if a real workflow needs logged-in social, and run it least-privilege (daemon off when idle).
+8. **`connectors/scheduled-tasks-and-hooks.md`** — wire the SessionStart boot-context hook first (wake up briefed), then PreCompact/PostToolUse/Stop, then the timed jobs (morning brief, email watcher).
+9. **`connectors/local-ai.md`** — confirm the free/local AI pieces (whisper, edge-tts, FFmpeg; optional voice clone; free image/video gen lanes) are installed.
+10. **`agents/`** — add subagent definitions as load appears: the core four first (briefing, email-scanner, deep-researcher, security-reviewer), then the wider 37-agent roster.
+11. **`rules/security-and-hardening.md`** — apply before the agent holds any real credential or browser session: secrets off cloud-sync, least-privilege, prompt-injection defense.
+12. **`capabilities/`** — optional once the core runs: build the operator dashboard and the daily ops board for a live view of the work.
+13. **`efficiency/token-economy.md`** — apply throughout, not as a step: lazy loading, context hygiene, subagent isolation, model right-sizing. Read it early; it changes how you do every step above.
+14. **`philosophy/`** — read it yourself; it explains why the pieces fit.
+
+Whenever you finish, cross-check against **`STACK.md`** — it lists every component. If the human runs something that isn't installed or isn't on that list, close the gap.
 
 ## Step 3 — Rules for adapting
 
