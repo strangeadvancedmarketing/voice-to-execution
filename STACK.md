@@ -45,6 +45,8 @@ Lazy loading, context hygiene (extract don't dump), subagent isolation, boot-con
 ## 8. Built capabilities — apps the agent produced
 - **Operator dashboard** — local Node/Express app; reads the session `.jsonl` live; 5 columns incl. a real embedded terminal (node-pty + xterm.js). `capabilities/operator-dashboard.md`
 - **Daily ops board** — a shareable page updated in place all day; top-3, calendar, live DONE/RUNNING/WAITING chips, follow-ups. `capabilities/daily-ops-board.md`
+- **Desktop companion** — a small always-on-top overlay streaming what the agent is doing right now (tool, target, latest reply), launched hidden so no second terminal pops up. `capabilities/desktop-companion.md`
+- **One-command startup** — one Start-Menu click brings up the agent terminal (wired to the messenger channel) + the companion overlay, cleanly; the companion launches windowless so the human never has to dismiss a stray console. `capabilities/one-command-startup.md`
 - **Knowledge graph** — build a graph from memory + docs, query it first for cheap cross-topic lookups. `efficiency/token-economy.md`
 
 ## 9. Rules — the operating contract
