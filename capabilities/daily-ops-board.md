@@ -12,7 +12,9 @@ A single web page (a shareable Artifact) that shows the human their whole day at
 
 ## How it works
 
-The agent publishes the board once in the morning and **updates the same page in place** all day (same URL), so the human keeps one tab open and watches it change. Status changes are pushed to the board as they happen — it's the heartbeat of the day, not a static report.
+The agent publishes the board once in the morning and **re-publishes the same file to the same URL** all day, so the human keeps one tab open. Status changes go up as they happen.
+
+**On "real-time" — be honest about the mechanic:** the board is a sandboxed page (a strict CSP blocks it from fetching anything on its own), so it **cannot auto-poll for its own updates**. The content at the URL is always the latest the agent published; the open tab reflects it on a **refresh** (and reliably on reopen). Whether a given viewer live-updates an already-open tab is the host's behavior, not something the page controls — so notate for the human: *refresh to see the latest.* If you want a genuinely live surface with no refresh, that's the **operator dashboard** (a local app that reads the session stream directly) — the board trades live-ness for being portable and shareable.
 
 ## Why a page and not a dashboard app
 
