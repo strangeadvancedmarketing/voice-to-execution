@@ -2,3 +2,10 @@
 # local planning, never ship
 _REBUILD_SPEC.md
 REVIEW_STAGED.md
+
+# internal audit/planning — never shipped
+_planning/
+
+# python cache
+__pycache__/
+*.pyc

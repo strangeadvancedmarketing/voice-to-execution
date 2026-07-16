@@ -1,0 +1,32 @@
+# Memory Index
+<!-- Format: `name.md — hook`. Read the named file for detail. Bucket lines list
+     several low-signal files on one line — read any by name. This file is loaded
+     into EVERY session; keep it compact. Compact/bucket entries as the store grows. -->
+
+## ★ Top high-signal
+<!-- The hardest rules and most-referenced files. Star (★) and flag (HARD / dated)
+     the ones that must not be missed in the always-loaded view. -->
+- ★feedback_example_hard_rule.md — HARD: <one-line restatement of the rule + its trigger>
+- feedback_example_rule_name.md — <one-line hook: what the rule is>
+- reference_example_tool.md — <what the tool is / when to reach for it>
+
+## Core behavioral rules
+<!-- The feedback_ bucket: how the agent should act. Largest category over time. -->
+- feedback_<name>.md — <hook>
+- feedback_<name>.md — <hook>
+- More (read by name): feedback_<a>.md, feedback_<b>.md, feedback_<c>.md
+
+## Tools & references
+<!-- The reference_ bucket: one file per tool / CLI / API / connector. -->
+- reference_example_tool.md — <install/invocation one-liner + key gotcha>
+- reference_<name>.md — <hook>
+- Read by name: reference_<a>.md, reference_<b>.md, reference_<c>.md
+
+## Projects & state
+<!-- The project_ bucket: workflows, products, live deployment state. -->
+- ★project_example_workflow.md — <status flag + one-line state>
+- project_<name>.md — <hook>
+
+## User
+<!-- The user_ bucket: operator profile and preferences. Small and stable. -->
+- user_<name>.md — <profile / preferences / context>

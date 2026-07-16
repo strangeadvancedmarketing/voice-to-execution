@@ -1,0 +1,133 @@
+{
+  "_optionalHooks": "These hooks require components that DO NOT ship in this repo, so they are intentionally left OUT of the active wiring below — a literal install throws no errors. Add them back only after you install the matching component: (1) 'nmem-hook-pre-compact' and 'nmem-hook-stop' — the optional neural-memory MCP package (see docs/connectors/mcp-servers.md); add to PreCompact and Stop respectively once installed. (2) 'node {{HOME}}/claude-buddy/hook-bridge.js' — the optional desktop companion (see docs/capabilities/desktop-companion.md); add to PostToolUse once installed. See docs/connectors/scheduled-tasks-and-hooks.md for the full wiring reference.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash {{HOME}}/.claude/hooks/session-start.sh",
+            "timeout": 20
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'WebFetch is blocked - opens visible Edge browser windows on workspace. Use curl via Bash instead.' && exit 1",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node {{HOME}}/.claude/hooks/precompact-saver.cjs",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node {{HOME}}/.claude/hooks/reorient.cjs",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node {{HOME}}/.claude/hooks/precompact-saver.cjs",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "node {{HOME}}/.claude/hooks/session-logger.cjs",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Read|Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node {{HOME}}/.claude/hooks/contextual-display.js",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node {{HOME}}/.claude/hooks/drift-monitor.cjs",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true,
+    "telegram@claude-plugins-official": true,
+    "session-report@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "hookify@claude-plugins-official": true,
+    "mcp-server-dev@claude-plugins-official": true,
+    "playground@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "ponytail@ponytail": true,
+    "small-business@knowledge-work-plugins": true,
+    "brand-voice@knowledge-work-plugins": true,
+    "marketing@knowledge-work-plugins": true,
+    "sales@knowledge-work-plugins": true,
+    "customer-support@knowledge-work-plugins": true,
+    "productivity@knowledge-work-plugins": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    },
+    "knowledge-work-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/knowledge-work-plugins"
+      }
+    }
+  },
+  "autoUpdatesChannel": "latest",
+  "tui": "fullscreen",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark",
+  "agentPushNotifEnabled": true
+}

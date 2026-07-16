@@ -1,0 +1,59 @@
+{
+  "_NOTE": [
+    "SANITIZED TEMPLATE. The original settings.local.json had ~45 pre-approved permission entries that were long, host-specific SSH/scp one-liners for a live client bot deployment. Every one of those was STRIPPED because they leaked the client's SSH username, a private Tailscale IP, on-disk client paths, the client's first name (used in TTS test strings), and the path to the client bot's source. They were operational allow-list entries specific to one machine — useless to anyone else and unsafe to publish.",
+    "KEPT: the file structure, a handful of GENERIC example allow-globs, and the two local hooks (the Chrome/Edge kill-guard PreToolUse hook and the impeccable design PostToolUse hook) — those are reusable patterns worth shipping.",
+    "'defaultMode': 'bypassPermissions' is intentionally COMMENTED OUT below (as '_defaultMode_DISABLED'). It auto-approves every tool call with no prompt. Only enable it (rename the key to 'defaultMode') if you fully trust this machine and understand the risk. Default here is to leave it off and rely on the allow-list.",
+    "Replace {{HOME}} and other {{...}} tokens with your real values before use."
+  ],
+  "permissions": {
+    "allow": [
+      "Bash(ssh *)",
+      "Bash(scp *)",
+      "Bash(edge-tts *)",
+      "Bash(cat *)",
+      "Bash(curl *)",
+      "Bash(python *)",
+      "Bash(python3 *)",
+      "Bash(\"C:\\Program Files\\Tailscale\\tailscale.exe\" *)",
+      "Bash(mkdir *)",
+      "Bash(ls *)",
+      "Bash(du *)",
+      "Bash(wc *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(git *)",
+      "Bash(node *)",
+      "Bash(npm *)",
+      "Bash(\"{{HOME}}\\gogcli\\{{GOOGLE_CLI}}\" *)",
+      "PowerShell(*)",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "mcp__plugin_telegram_telegram__reply",
+      "mcp__plugin_telegram_telegram__react",
+      "mcp__plugin_telegram_telegram__edit_message",
+      "mcp__plugin_telegram_telegram__download_attachment"
+    ],
+    "_defaultMode_DISABLED": "bypassPermissions"
+  },
+  "_optionalHooks": "The impeccable design-detector PostToolUse hook (node ${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/hook.mjs) is intentionally NOT wired below — only the impeccable SKILL.md ships in this repo, not its scripts/hook.mjs, so wiring it here would fail on a literal install. Add it back to PostToolUse (matcher Edit|Write|MultiEdit) only after you install the impeccable script. See docs/connectors/scheduled-tasks-and-hooks.md for the wiring reference.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -c \"import sys,json,re; c=json.load(sys.stdin).get('tool_input',{}).get('command',''); m=re.search(r'(taskkill|pkill|kill).{0,60}(chrome|msedge)', c, re.I); (sys.stderr.write('BLOCKED: never kill Chrome/Edge - it force-closes the operator real browser (HARD RULE). Headless scripts must self-close via browser.close(); leave any stray headless process alone.'), sys.exit(2)) if m else sys.exit(0)\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "description": "Local overrides: a generic permission allow-list and the Chrome/Edge kill-guard PreToolUse hook (self-contained, no external file). The optional impeccable design detector is noted in _optionalHooks above."
+}

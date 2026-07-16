@@ -1,64 +1,83 @@
-# The Complete Stack — every component, accounted for
+# STACK — the complete manifest
 
-This is the full map. Everything the operator runs, connects to, or was built to do, in one place — so nothing lives only in someone's memory. Each item points to where it's documented. Keys, tokens, and private business data are deliberately excluded; the patterns and commands are complete.
+Every component in the framework, in one place, each pointing to its documentation. This file is the checklist that proves nothing is hidden behind "etc." Keys, tokens, client data, and personal information are excluded by design; the patterns and commands are complete.
 
-## 1. The voice loop (the product)
-- **Telegram voice loop** — voice in → local transcription → execution → text + voice reply. `connectors/telegram-voice-loop.md`
-- **Inbound transcription** — `faster-whisper` (small, local; term-biasing via `initial_prompt`/`hotwords`). `connectors/local-ai.md`
-- **Outbound voice** — `edge-tts`, one locked voice. `connectors/local-ai.md`
-- **Reactions & receipts** — 👀/✅ as silent status; paste-ready messages. `rules/operating-rules.md`
+The stack has two halves: the **core** — who the agent is, which installs as a unit — and the **capabilities** — what the agent does, which you draw from as needed.
 
-## 2. Connectors — everything the agent plugs into
-- **Google Suite** via the `gog` CLI (Gmail, Calendar, Drive, Sheets, Docs). `connectors/google-suite.md`
-- **MCP server layer** — Stripe, HubSpot, Apify (local npx); Canva, Zapier, HuggingFace (hosted); Playwright, desktop-commander, neural-memory. `connectors/mcp-servers.md`
-- **Browser automation** — real logged-in Chrome on a debug port (CDP), the token-cheaper `agent-browser`, shadow-DOM piercing, captcha/final-submit team-flow. `connectors/browser-automation.md`
-- **Web & social research** — `agent-reach` (free web/pages/YouTube/RSS) + the OpenCLI extension bridge for logged-in social. `connectors/web-and-social-research.md`
-- **Scheduled tasks & hooks** — see section 5. `connectors/scheduled-tasks-and-hooks.md`
-- **Local & free AI** — whisper, edge-tts, voice clone, FFmpeg, free image/video gen lanes. `connectors/local-ai.md`
+## Contents
 
-## 3. Agents — the 37-agent fleet
-Planning, code review (11 language + domain reviewers), build/test resolvers, maintenance, ops & monitoring, research, growth/business, chief-of-staff. Full named roster + provenance: `agents/README.md`
+- [Core — the operating system](#core--the-operating-system)
+- [Core — connectors](#core--connectors)
+- [Core — efficiency](#core--efficiency)
+- [Capabilities — workflows](#capabilities--workflows)
+- [Philosophy](#philosophy)
+- [Intentionally excluded](#intentionally-excluded)
+- [Provenance](#provenance)
 
-## 4. Memory & knowledge — the compounding moat
-- **Agent memory** — typed files (`feedback_/project_/reference_/user_`) + always-loaded `MEMORY.md` index; how the agent runs. `memory/README.md`
-- **Lazy loading** — index always in context, files on demand; scales to hundreds. `memory/README.md`, `efficiency/token-economy.md`
-- **Neural/associative capture** — a capture hook saves every session; a query layer recalls across them (optional layer on top of files). `connectors/mcp-servers.md`
-- **Knowledge vault (the second brain)** — an **Obsidian** vault of the whole operation (trackers, research, content, sessions, design system) with `[[wikilinks]]`, a queryable knowledge graph, and hourly snapshots. Trackers are canonical state; the graph is the cheap cross-topic lookup. `capabilities/knowledge-vault.md`
+## Core — the operating system
 
-## 5. Automation — hooks & scheduled jobs (the actual wired set)
-Working, sanitized scripts ship in **[`hooks/`](hooks/)** (5 files + README + a copy-paste `settings.json` snippet in the doc).
-- **SessionStart** → `hooks/boot-context-compiler.ps1`; wake up briefed. `connectors/scheduled-tasks-and-hooks.md`
-- **PreToolUse** → guard/block tools you never want fired blindly.
-- **PreCompact** → neural-memory capture + session snapshot before the window compacts.
-- **PostCompact** → reorient hook; re-ground after summarization so the agent doesn't drift.
-- **PostToolUse** → contextual state display + companion widget bridge.
-- **Stop** → neural-memory capture + snapshot-saver + session-logger to the day log.
-- **UserPromptSubmit** → drift-monitor; flags sliding off standing rules early.
-- **Scheduled jobs** → morning briefing, ~4h email watcher, follow-up sweeps (OS scheduler / cron). `connectors/scheduled-tasks-and-hooks.md`
+The drop-in configuration in [`.claude/`](.claude/). This is the point of the repository.
 
-## 6. Efficiency — running heavy on a normal plan
-Lazy loading, context hygiene (extract don't dump), subagent isolation, boot-context compilation, knowledge-graph queries, model right-sizing, paste-ready over round-trips. `efficiency/token-economy.md`
+| Component | Location | Documented in |
+|-----------|----------|---------------|
+| Operating model + hard rules | [`.claude/CLAUDE.md.template`](.claude/CLAUDE.md.template) | [`docs/rules/`](docs/rules/) |
+| Operating rules (working style) | [`.claude/rules/`](.claude/rules/) | [`docs/rules/operating-rules.md`](docs/rules/operating-rules.md) |
+| Lessons learned (40+, each with its cost) | — | [`docs/rules/lessons-learned.md`](docs/rules/lessons-learned.md) |
+| Security & hardening | [`.claude/rules/`](.claude/rules/) | [`docs/rules/security-and-hardening.md`](docs/rules/security-and-hardening.md) |
+| Memory system (typed files + index + lazy loading) | [`.claude/memory/`](.claude/memory/) | [`docs/memory.md`](docs/memory.md) |
+| Continuity hooks (boot, drift, reorient, pre-compact, logger) | [`.claude/hooks/`](.claude/hooks/) | [`docs/hooks.md`](docs/hooks.md) |
+| Hook + plugin wiring | [`.claude/settings.json.template`](.claude/settings.json.template) | [`docs/connectors/scheduled-tasks-and-hooks.md`](docs/connectors/scheduled-tasks-and-hooks.md) |
+| Agent fleet (37, hardened) | [`.claude/agents/`](.claude/agents/) | [`docs/agents.md`](docs/agents.md) |
+| Skills (on-demand capabilities) | [`.claude/skills/`](.claude/skills/) | [`docs/skills.md`](docs/skills.md) |
 
-## 7. Skills & plugins — packaged capabilities
-- **~33 custom + plugin skills** across content/media, marketing/SEO, design, research, and ops (tip-video, video-pipeline, compress, handoff, invoice, graphify, deep-research, agent-reach, context-budget, the SEO suite, cold-email, lead-magnets, landing-page-generator, impeccable, data-scraper-agent, and more). `skills/README.md`
-- **Plugin bundles** — small-business, sales, marketing, customer-support, productivity, brand-voice + tooling plugins (skill-creator, hookify, mcp-server-dev, session-report, playground, claude-md-management, frontend-design) + operator plugins (telegram, ponytail). `skills/README.md`
+## Core — connectors
 
-## 8. Built capabilities — apps the agent produced
-- **Operator dashboard** — local Node/Express app; reads the session `.jsonl` live; 5 columns incl. a real embedded terminal (node-pty + xterm.js). `capabilities/operator-dashboard.md`
-- **Daily ops board** — a shareable page updated in place all day; top-3, calendar, live DONE/RUNNING/WAITING chips, follow-ups. `capabilities/daily-ops-board.md`
-- **Desktop companion** — a small always-on-top overlay streaming what the agent is doing right now (tool, target, latest reply), launched hidden so no second terminal pops up. `capabilities/desktop-companion.md`
-- **One-command startup** — one Start-Menu click brings up the agent terminal (wired to the messenger channel) + the companion overlay, cleanly; the companion launches windowless so the human never has to dismiss a stray console. `capabilities/one-command-startup.md`
-- **Knowledge graph** — build a graph from memory + docs, query it first for cheap cross-topic lookups. `efficiency/token-economy.md`
+How the agent reaches the world. Each guide ships verified setup commands. See [`docs/connectors/`](docs/connectors/).
 
-## 9. Rules — the operating contract
-- **Hard rules** (trust layer): verify before claiming, protect the money, execute-don't-instruct, test-one-before-batch, one-playbook, timezone discipline. `rules/hard-rules.md`
-- **Operating rules** (working style): lead with outcome, plain-text messenger, paste-ready, no raw data, root-cause fixes, sequencing. `rules/operating-rules.md`
-- **Security & hardening**: secrets off cloud-sync, token ACLs, audit-before-access, least-privilege, prompt-injection defense, risky tools off when idle. `rules/security-and-hardening.md`
-- **Lessons learned**: the hard-won operating wisdom — every rule that was learned by making the mistake first, so a new agent gets the perfected version without paying for it again. `rules/lessons-learned.md`
+| Connector | What it is | Guide |
+|-----------|-----------|-------|
+| Voice loop | Messaging in → local transcription → execution → text + voice reply | [`telegram-voice-loop.md`](docs/connectors/telegram-voice-loop.md) |
+| Google Suite | Gmail, Calendar, Drive, Sheets, Docs by CLI | [`google-suite.md`](docs/connectors/google-suite.md) |
+| MCP servers | Payments, CRM, scraping, browser, machine, memory | [`mcp-servers.md`](docs/connectors/mcp-servers.md) |
+| Browser automation | A real, logged-in browser the agent drives | [`browser-automation.md`](docs/connectors/browser-automation.md) |
+| Web & social research | Free web, YouTube, RSS, and logged-in social | [`web-and-social-research.md`](docs/connectors/web-and-social-research.md) |
+| Scheduled tasks & hooks | The push layer — jobs on a timer, hooks on events | [`scheduled-tasks-and-hooks.md`](docs/connectors/scheduled-tasks-and-hooks.md) |
+| Local & free AI | Transcription, TTS, voice clone, media, free generation | [`local-ai.md`](docs/connectors/local-ai.md) |
+| All external APIs | One index of every API the framework touches (bring your own keys) | [`apis.md`](docs/connectors/apis.md) |
+| All CLIs & local tools | One index of every command-line tool and local binary used | [`tools-and-clis.md`](docs/connectors/tools-and-clis.md) |
 
-## 10. Philosophy — why it works
-Voice-to-execution as architecture; sequencing over scattering; the voice-loop habit + cumulative context as the two moats. `philosophy/voice-to-execution.md`
+## Core — efficiency
 
----
+Running a heavy agent all day on a normal plan. See [`docs/efficiency/token-economy.md`](docs/efficiency/token-economy.md): lazy loading, context hygiene, subagent isolation, boot-context compilation, knowledge-graph queries, model right-sizing, paste-ready output.
 
-**How to use this map:** a visiting agent reads `SETUP_AI.md`, interviews the human, and installs the pieces that fit — in the order given there. This file is the checklist that proves nothing was left out. If you run something that isn't on this list, it belongs here — add it.
+## Capabilities — workflows
+
+Production workflows in [`workflows/`](workflows/). Present in the repository, sectioned so the core reads clean; install the ones that fit the business.
+
+| Workflow | What it produces | Guide |
+|----------|------------------|-------|
+| Content | Short-form video, carousels, cloned voiceover, free generation lanes | [`workflows/content/`](workflows/content/) |
+| Lead generation | Local lead sourcing + business-audit tools (no third-party platform) | [`workflows/lead-gen/`](workflows/lead-gen/) |
+| Publishing | Cross-post to social + newsletter from one source | [`workflows/publishing/`](workflows/publishing/) |
+| Invoicing | Branded invoices/receipts as PDFs with a pay link | [`workflows/invoicing/`](workflows/invoicing/) |
+| Client deployment | Standing the same agent up for others, on their machines | [`workflows/client-deployment/`](workflows/client-deployment/) |
+
+The agent also builds its own operating surfaces — a live operator dashboard, a daily ops board, and a knowledge vault. See [`docs/capabilities/`](docs/capabilities/).
+
+## Philosophy
+
+Why the framework is shaped the way it is: voice-to-execution as architecture, sequencing over scattering, and the two moats — the voice-loop habit and cumulative context. See [`docs/philosophy/`](docs/philosophy/).
+
+## Intentionally excluded
+
+What deliberately stays out, and why — so the omissions are honest, not hidden:
+
+- **Third-party platform builds.** The lead-gen tools ship in their local-run form only; the platform-specific (Apify) deployment is not included.
+- **Client data and client-specific services.** Specific client bots, credentials, hostnames, and the cloud services tied to individual clients stay private.
+- **A separate persona framework.** An adjacent, mostly-dormant agent persona built on a different gateway is out of scope for this repository.
+- **Private knowledge-base contents.** The knowledge-vault *system* ships; its contents (finances, legal, medical, personal, client files) do not.
+- **Secrets.** No keys, tokens, or credentials — the agent supplies its own during setup.
+
+## Provenance
+
+Every component ran in production before entering this repository; pieces that did not survive contact with reality are not here. The agent fleet derives from a hardened snapshot of an open-source collection, credited in [`.claude/agents/`](.claude/agents/). Released under the [MIT License](LICENSE).

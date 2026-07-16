@@ -11,3 +11,7 @@ You don't need to read the rest of this repo. Your agent does.
 4. The proof it worked: you send a voice note from your phone, and the finished work comes back to you.
 
 That's it. The agent does the rest — that's the whole point.
+
+## An honest word on setup
+
+The *using* is voice notes. The *first-time setup* has a technical side — installing a few tools (Python, Node, ffmpeg), a Google sign-in for calendar and email, some wiring — but **your agent does that work.** Your job is to answer its questions and approve a few things at the keyboard: installing an app, signing into an account once, clicking a confirmation. It's a one-time cost, and none of it is scary. If you'd rather skip setup entirely, the [Managed option](https://strangeadvancedmarketing.com/bot) exists for exactly that — same framework, set up and run for you.
