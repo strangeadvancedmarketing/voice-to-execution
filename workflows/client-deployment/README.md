@@ -26,6 +26,8 @@ The receptionist code is identical either way. You swap one function — `call_b
 
 Complete enough to adapt; wire your channel's file-download and your brain call. This uses the Telegram Bot API (stdlib only) because that is the shipped, proven channel.
 
+> A complete, runnable version of this receptionist ships in [`example-bot/bot.py`](example-bot/bot.py) — raw Bot API long-polling, pluggable `TRANSCRIBE_CMD` / `EXEC_CMD` (point the brain at your agent CLI, e.g. `claude -p`), and a `--selftest` that proves the transcribe → run → reply plumbing offline. Note: this is the **client-deployment** path (a standalone receptionist bot); an operator running the framework on their own machine uses the Claude Code Telegram plugin instead (`docs/connectors/telegram-voice-loop.md`).
+
 ```python
 #!/usr/bin/env python3
 """Receptionist bot: long-poll, transcribe voice, call the brain, speak the reply.
