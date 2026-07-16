@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claude Buddy</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      background: transparent;
+      overflow: hidden;
+      width: 300px;
+      height: 400px;
+      user-select: none;
+    }
+
+    #app {
+      width: 300px;
+      height: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 12px;
+    }
+
+    /* Speech bubble */
+    #bubble {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 14px;
+      padding: 10px 14px;
+      max-width: 240px;
+      min-width: 120px;
+      text-align: center;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #1a202c;
+      line-height: 1.4;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18), 0 1px 4px rgba(0, 0, 0, 0.12);
+      position: relative;
+      margin-bottom: 6px;
+      word-break: break-word;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      transition: opacity 0.3s ease;
+    }
+
+    /* Bubble pointer triangle */
+    #bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 9px solid rgba(255, 255, 255, 0.95);
+    }
+
+    /* Robot container - draggable */
+    #robot {
+      cursor: grab;
+      width: 120px;
+      height: 150px;
+      position: relative;
+      flex-shrink: 0;
+      animation: bob 3s ease-in-out infinite;
+    }
+
+    #robot:active {
+      cursor: grabbing;
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-6px); }
+    }
+
+    /* Antenna */
+    .antenna-base {
+      position: absolute;
+      top: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 22px;
+      background: #4A5568;
+      border-radius: 2px;
+    }
+
+    .antenna-tip {
+      position: absolute;
+      top: 0px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      height: 10px;
+      background: #63B3ED;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #63B3ED;
+      animation: pulse-tip 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-tip {
+      0%, 100% { box-shadow: 0 0 6px #63B3ED; opacity: 1; }
+      50%       { box-shadow: 0 0 14px #90CDF4; opacity: 0.7; }
+    }
+
+    /* Body */
+    .body {
+      position: absolute;
+      top: 26px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 82px;
+      height: 88px;
+      background: #2D3748;
+      border-radius: 18px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    /* Screen / face */
+    .screen {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 44px;
+      background: #63B3ED;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.2), 0 0 12px rgba(99, 179, 237, 0.4);
+    }
+
+    /* Eyes */
+    .eye {
+      width: 12px;
+      height: 12px;
+      background: white;
+      border-radius: 50%;
+      position: relative;
+      animation: blink 4s ease-in-out infinite;
+    }
+
+    .eye::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 4px;
+      height: 4px;
+      background: #2D3748;
+      border-radius: 50%;
+    }
+
+    @keyframes blink {
+      0%, 90%, 100% { transform: scaleY(1); }
+      94%            { transform: scaleY(0.08); }
+    }
+
+    /* Idle: eyes look around */
+    @keyframes look-around {
+      0%, 70%, 100% { transform: translate(0, 0); }
+      75%           { transform: translate(3px, -1px); }
+      85%           { transform: translate(-3px, 0); }
+      92%           { transform: translate(0, 2px); }
+    }
+
+    .eye::after {
+      animation: look-around 8s ease-in-out infinite;
+    }
+
+    /* Idle: curious tilt */
+    @keyframes curious-tilt {
+      0%, 85%, 100% { transform: translateY(0px) rotate(0deg); }
+      88%           { transform: translateY(-4px) rotate(4deg); }
+      92%           { transform: translateY(-2px) rotate(-3deg); }
+    }
+
+    #robot.idle {
+      animation: bob 3s ease-in-out infinite, curious-tilt 12s ease-in-out infinite;
+    }
+
+    /* Idle: antenna wiggle */
+    @keyframes antenna-wiggle {
+      0%, 80%, 100% { transform: translateX(-50%) rotate(0deg); }
+      83%           { transform: translateX(-50%) rotate(12deg); }
+      86%           { transform: translateX(-50%) rotate(-10deg); }
+      89%           { transform: translateX(-50%) rotate(6deg); }
+      92%           { transform: translateX(-50%) rotate(0deg); }
+    }
+
+    #robot.idle .antenna-base {
+      animation: antenna-wiggle 7s ease-in-out infinite;
+    }
+
+    /* Active: screen glow brighter when working */
+    #robot.active .screen {
+      background: #4FD1C5;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.2), 0 0 18px rgba(79, 209, 197, 0.6);
+    }
+
+    /* Wave animation for greeting */
+    @keyframes wave-arm {
+      0%, 70%, 100% { transform: rotate(-6deg); }
+      75%           { transform: rotate(-30deg); }
+      80%           { transform: rotate(-15deg); }
+      85%           { transform: rotate(-35deg); }
+      90%           { transform: rotate(-6deg); }
+    }
+
+    #robot.wave .arm.right {
+      animation: wave-arm 4s ease-in-out infinite;
+    }
+
+    /* Chest panel detail */
+    .chest {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 42px;
+      height: 14px;
+      background: #1A202C;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .led {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #68D391;
+      animation: led-blink 1.6s ease-in-out infinite;
+    }
+
+    .led:nth-child(2) {
+      background: #F6E05E;
+      animation-delay: 0.5s;
+    }
+
+    .led:nth-child(3) {
+      background: #FC8181;
+      animation-delay: 1s;
+    }
+
+    @keyframes led-blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+
+    /* Arms */
+    .arm {
+      position: absolute;
+      top: 38px;
+      width: 14px;
+      height: 44px;
+      background: #2D3748;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .arm.left  { left: 8px; transform: rotate(6deg); }
+    .arm.right { right: 8px; transform: rotate(-6deg); }
+
+    /* Hands */
+    .hand {
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 14px;
+      height: 14px;
+      background: #4A5568;
+      border-radius: 50%;
+    }
+
+    /* Legs */
+    .legs {
+      position: absolute;
+      top: 112px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+    }
+
+    .leg {
+      width: 16px;
+      height: 26px;
+      background: #2D3748;
+      border-radius: 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .foot {
+      width: 20px;
+      height: 10px;
+      background: #4A5568;
+      border-radius: 5px;
+      margin-top: 2px;
+      margin-left: -2px;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="bubble">💤 Idle...</div>
+
+    <div id="robot">
+      <!-- Antenna -->
+      <div class="antenna-base">
+        <div class="antenna-tip"></div>
+      </div>
+
+      <!-- Body -->
+      <div class="body">
+        <!-- Screen/face -->
+        <div class="screen">
+          <div class="eye"></div>
+          <div class="eye"></div>
+        </div>
+        <!-- Chest panel -->
+        <div class="chest">
+          <div class="led"></div>
+          <div class="led"></div>
+          <div class="led"></div>
+        </div>
+      </div>
+
+      <!-- Arms -->
+      <div class="arm left"><div class="hand"></div></div>
+      <div class="arm right"><div class="hand"></div></div>
+
+      <!-- Legs -->
+      <div class="legs">
+        <div>
+          <div class="leg"></div>
+          <div class="foot"></div>
+        </div>
+        <div>
+          <div class="leg"></div>
+          <div class="foot"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const bubble = document.getElementById('bubble');
+    const robot  = document.getElementById('robot');
+
+    let idleTimer = null;
+
+    const idleMessages = [
+      '💤 Idle...',
+      '🤔 Thinking about stuff...',
+      '👀 Looking around...',
+      '😴 Napping...',
+      '🎵 Humming quietly...',
+      '🔋 Charging up...',
+      '✨ Daydreaming...',
+    ];
+
+    function setIdleText() {
+      const msg = idleMessages[Math.floor(Math.random() * idleMessages.length)];
+      bubble.textContent = msg;
+      robot.className = 'idle wave';
+    }
+
+    function setActiveState() {
+      robot.className = 'active';
+    }
+
+    function resetIdleTimer() {
+      clearTimeout(idleTimer);
+      setActiveState();
+      idleTimer = setTimeout(setIdleText, 10000);
+    }
+
+    // Tool icon map
+    const toolIcons = {
+      Read:          '📖',
+      Write:         '✏️',
+      Edit:          '✏️',
+      Bash:          '⚡',
+      Glob:          '🔍',
+      Grep:          '🔎',
+      WebFetch:      '🌐',
+      WebSearch:     '🌐',
+      mcp__playwright__browser_navigate: '🌐',
+      mcp__playwright__browser_click:    '🖱️',
+      mcp__playwright__browser_type:     '⌨️',
+      mcp__playwright__browser_take_screenshot: '📸',
+      Task:          '🤖',
+      TodoWrite:     '📝',
+      TodoRead:      '📝',
+    };
+
+    function formatEvent(data) {
+      const tool = data.tool_name || data.tool || '';
+      const icon = toolIcons[tool] || '🔧';
+
+      if (tool === 'Read' && data.tool_input && data.tool_input.file_path) {
+        const name = data.tool_input.file_path.split(/[\\/]/).pop();
+        return `${icon} Reading ${name}`;
+      }
+      if ((tool === 'Write' || tool === 'Edit') && data.tool_input && data.tool_input.file_path) {
+        const name = data.tool_input.file_path.split(/[\\/]/).pop();
+        return `${icon} Editing ${name}`;
+      }
+      if (tool === 'Bash' && data.tool_input && data.tool_input.description) {
+        return `${icon} ${data.tool_input.description}`;
+      }
+      if (tool === 'Bash' && data.tool_input && data.tool_input.command) {
+        const cmd = data.tool_input.command.split(' ')[0];
+        return `${icon} Running ${cmd}`;
+      }
+      if ((tool === 'WebFetch' || tool === 'WebSearch') && data.tool_input) {
+        const url = data.tool_input.url || data.tool_input.query || '';
+        const short = url.length > 28 ? url.slice(0, 26) + '…' : url;
+        return `🌐 Fetching ${short}`;
+      }
+      if (tool && tool.startsWith('mcp__playwright__browser_navigate') && data.tool_input && data.tool_input.url) {
+        const url = data.tool_input.url;
+        const short = url.length > 26 ? url.slice(0, 24) + '…' : url;
+        return `🌐 Navigating ${short}`;
+      }
+      if (tool === 'Grep' && data.tool_input && data.tool_input.pattern) {
+        return `🔎 Searching for ${data.tool_input.pattern}`;
+      }
+      if (tool === 'Glob' && data.tool_input && data.tool_input.pattern) {
+        return `🔍 Globbing ${data.tool_input.pattern}`;
+      }
+      if (data.message) {
+        return data.message.slice(0, 60);
+      }
+      if (tool) {
+        return `${icon} ${tool.replace(/_/g, ' ')}`;
+      }
+      return '🔧 Working...';
+    }
+
+    // Listen for hook events from main process
+    if (window.electronAPI) {
+      window.electronAPI.onHookEvent((data) => {
+        bubble.textContent = formatEvent(data);
+        resetIdleTimer();
+      });
+    }
+
+    // Initialize idle timer
+    resetIdleTimer();
+
+    // Close button (X) — quits just Buddy; the Claude Code terminal keeps
+    // running. Anchored to the robot's head (not the window) so it sits ON him
+    // instead of floating in the empty top of the transparent window.
+    const closeBtn = document.createElement('div');
+    closeBtn.id = 'buddy-close';
+    closeBtn.textContent = '✕';
+    closeBtn.title = 'Close Buddy (your terminal stays running)';
+    closeBtn.style.cssText =
+      'position:absolute;top:16px;right:-2px;width:20px;height:20px;line-height:20px;' +
+      'text-align:center;border-radius:50%;background:rgba(0,0,0,0.55);color:#fff;' +
+      'font-size:12px;cursor:pointer;z-index:9999;' +
+      'font-family:system-ui,sans-serif;user-select:none;';
+    closeBtn.addEventListener('mouseenter', () => { closeBtn.style.background = 'rgba(220,60,70,0.95)'; });
+    closeBtn.addEventListener('mouseleave', () => { closeBtn.style.background = 'rgba(0,0,0,0.55)'; });
+    closeBtn.addEventListener('click', () => { if (window.electronAPI) window.electronAPI.closeBuddy(); });
+    robot.appendChild(closeBtn);
+
+    // Drag to move the window — renderer computes the new position from the
+    // mouse delta and asks main to move it (setPosition via IPC). Grab anywhere
+    // on the robot or the bubble.
+    let isDragging = false, winStart = null, mouseStart = null;
+
+    function startDrag(e) {
+      if (e.button !== 0 || !window.electronAPI) return;
+      if (e.target.closest('#buddy-close')) return;   // X stays clickable
+      isDragging = true;
+      winStart = window.electronAPI.getWindowPosition();
+      mouseStart = { x: e.screenX, y: e.screenY };
+      e.preventDefault();
+    }
+    robot.addEventListener('mousedown', startDrag);
+    bubble.addEventListener('mousedown', startDrag);
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      window.electronAPI.moveWindow(
+        winStart.x + (e.screenX - mouseStart.x),
+        winStart.y + (e.screenY - mouseStart.y)
+      );
+    });
+    document.addEventListener('mouseup', () => { isDragging = false; });
+
+    // Click-through on transparent areas (keep the widget live). While dragging,
+    // never toggle ignore — otherwise a fast mouse over a transparent pixel
+    // would drop the button and kill the drag mid-move.
+    document.addEventListener('mousemove', (e) => {
+      if (!window.electronAPI || isDragging) return;
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      const isWidget = el && (el === robot || el.closest('#robot') || el === bubble ||
+        el.closest('#bubble') || el === closeBtn);
+      window.electronAPI.setIgnoreMouseEvents(!isWidget, { forward: true });
+    });
+  </script>
+</body>
+</html>
