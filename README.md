@@ -116,7 +116,7 @@ Production workflows the agent runs. Present in the repository, sectioned so the
 | **A messaging channel** | The voice loop | Telegram is the shipped, proven implementation; others are a documented build. |
 | **An always-on machine** | Scheduled jobs | Optional — only the push layer (briefings, watchers) needs it; the voice loop does not. |
 
-Full, platform-specific setup is in [`SETUP_AI.md`](SETUP_AI.md).
+The complete list of what you bring (keys, accounts, a machine) is in [`WHAT_YOU_SUPPLY.md`](WHAT_YOU_SUPPLY.md); full platform-specific setup is in [`SETUP_AI.md`](SETUP_AI.md).
 
 ## Design principles
 
