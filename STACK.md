@@ -24,7 +24,7 @@ The drop-in configuration in [`.claude/`](.claude/). This is the point of the re
 | Operating rules (working style) | [`.claude/rules/`](.claude/rules/) | [`docs/rules/operating-rules.md`](docs/rules/operating-rules.md) |
 | Lessons learned (40+, each with its cost) | — | [`docs/rules/lessons-learned.md`](docs/rules/lessons-learned.md) |
 | Security & hardening | [`.claude/rules/`](.claude/rules/) | [`docs/rules/security-and-hardening.md`](docs/rules/security-and-hardening.md) |
-| Memory system (typed files + index + lazy loading) | [`.claude/memory/`](.claude/memory/) | [`docs/memory.md`](docs/memory.md) |
+| Memory system (typed files + index + lazy loading; + neural-memory capture & recall) | [`.claude/memory/`](.claude/memory/) | [`docs/memory.md`](docs/memory.md) |
 | Continuity hooks (boot, drift, reorient, pre-compact, logger) | [`.claude/hooks/`](.claude/hooks/) | [`docs/hooks.md`](docs/hooks.md) |
 | Hook + plugin wiring | [`.claude/settings.json.template`](.claude/settings.json.template) | [`docs/connectors/scheduled-tasks-and-hooks.md`](docs/connectors/scheduled-tasks-and-hooks.md) |
 | Agent fleet (37, hardened) | [`.claude/agents/`](.claude/agents/) | [`docs/agents.md`](docs/agents.md) |

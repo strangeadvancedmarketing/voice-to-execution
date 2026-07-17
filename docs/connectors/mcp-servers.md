@@ -55,12 +55,17 @@ claude mcp add playwright -- npx @playwright/mcp@latest
 # The human's computer: files, apps, terminal
 claude mcp add desktop-commander -- npx -y @wonderwhy-er/desktop-commander
 
-# Persistent associative memory capture (free, third-party — see note)
+# Persistent associative memory — capture + recall (free, third-party — see note)
 pip install neural-memory
 claude mcp add neural-memory -- nmem-mcp
+# then run /mcp, confirm it connects — you now have nmem_recall / nmem_context / nmem_remember
 ```
 
-> **neural-memory status:** `neural-memory` is a real, published PyPI package (it installs the `nmem-mcp` server plus the `nmem-hook-*` capture hooks used in `connectors/scheduled-tasks-and-hooks.md`). It is a **third-party/community package, not an Anthropic tool** — so after installing, actually run `/mcp` and confirm it connects and captures before depending on it, and treat it as an *optional* layer on top of the file-based memory (`memory/README.md`), which works with no MCP at all. If it doesn't install cleanly on your Python, skip it — nothing else in the stack requires it.
+> **neural-memory — the full associative memory layer (recommended, not just capture).** `neural-memory` is a real, published PyPI package with **two halves that work together**. Ship both, or the agent captures your history but never uses it:
+> - **Capture** = the `nmem-hook-*` hooks (wired in `connectors/scheduled-tasks-and-hooks.md`). They auto-save each session into a local "brain" — a spreading-activation graph in SQLite, **not a vector DB**.
+> - **Recall** = this MCP server (`nmem-mcp`). It gives the agent three live tools mid-session: **`nmem_recall`** (targeted lookup), **`nmem_context`** (associative pull of related past context), and **`nmem_remember`** (write). Recall is the half that makes the agent *feel* like it remembers — it pulls relevant history on its own instead of re-reading files. It queries the same `default` brain the capture hooks write to.
+>
+> Common gotcha: it's easy to wire the capture hooks and forget to register the recall MCP, which leaves you capturing everything and recalling nothing. Register both. It is a **third-party/community package, not an Anthropic tool** — so after `claude mcp add`, run `/mcp`, confirm it connects, and do one real `nmem_recall` to see your own data come back before depending on it. The file-based memory (`memory/README.md`) is the **floor**: it works with zero MCP setup. neural-memory is the **full experience** on top. If it won't install on your Python, skip it and you still have file memory; nothing else in the stack requires it.
 
 > **A second, persona-specific capture server** ran alongside `neural-memory` in the origin stack — a small local Python MCP server that captured into a separate vault path (pointed at by an env var). It is **optional and dormant**: it belongs to a separate agent persona that is offline, and nothing in the core loop needs it. If you don't have that persona's vault, don't wire it — the file-based memory plus `neural-memory` is the whole memory story for a fresh install. It's noted here only so the inventory is honest, not because you should reproduce it.
 

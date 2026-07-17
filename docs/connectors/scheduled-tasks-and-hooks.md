@@ -76,7 +76,7 @@ The `{{HOME}}` tokens below are filled during setup (Claude Code also expands `~
 }
 ```
 
-> The `nmem-hook-pre-compact` / `nmem-hook-stop` entries belong to the optional **neural-memory** MCP (`connectors/mcp-servers.md`, flagged there as unverified). Drop those two lines if you don't run it — the shipped scripts stand on their own. The `PreToolUse` guard is optional (it blocks the visible-browser `WebFetch` tool); keep it only if you rely on `curl` instead. The `contextual-display.js` hook is Windows-specific desktop UI; drop it if you don't want documents auto-surfaced. If a `{{HOME}}` path doesn't resolve on your setup, use the full path (e.g. `C:\Users\<you>\.claude\hooks\...`).
+> The `nmem-hook-pre-compact` / `nmem-hook-stop` entries are the **capture** half of `neural-memory` — they auto-save each session to the local brain. The **recall** half (the `nmem-mcp` MCP that gives the agent `nmem_recall` / `nmem_context` / `nmem_remember`) is registered separately in `connectors/mcp-servers.md`. Wire **both** for the full memory layer, or you capture history and never recall it. If you don't run neural-memory at all, drop these two lines — the shipped scripts stand on their own. The `PreToolUse` guard is optional (it blocks the visible-browser `WebFetch` tool); keep it only if you rely on `curl` instead. The `contextual-display.js` hook is Windows-specific desktop UI; drop it if you don't want documents auto-surfaced. If a `{{HOME}}` path doesn't resolve on your setup, use the full path (e.g. `C:\Users\<you>\.claude\hooks\...`).
 
 ## The full hook set — this is the actual production wiring
 
